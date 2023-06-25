@@ -46,3 +46,11 @@ def test_instantiate_from_csv():
 def test_string_to_number():
     Item.instantiate_from_csv()
     assert Item.string_to_number('5.4') == 5
+
+
+def test_str(item_name):
+    assert str(item_name) == "Смартфон"
+
+
+def test_repr(item_name):
+    assert repr(item_name) == "Item('Смартфон', 10000, 20)"
