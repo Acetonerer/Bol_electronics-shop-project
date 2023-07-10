@@ -1,5 +1,6 @@
 import csv
 from abc import ABC
+from src.instantiate import InstantiateCSVError
 
 
 class Item(ABC):
@@ -57,10 +58,16 @@ class Item(ABC):
     @classmethod
     def instantiate_from_csv(cls):
         Item.all = []
-        with open("../src/items.csv", encoding='WINDOWS-1251') as csvfile:
-            read = csv.DictReader(csvfile)
-            for appro in read:
-                cls(appro['name'], appro['price'], appro['quantity'])
+        try:
+            with open("../src/items.csv", encoding='cp1251') as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    if "name" and "price" and "quantity" in row:
+                        cls(row['name'], row['price'], row['quantity'])
+                    else:
+                        raise InstantiateCSVError
+        except FileNotFoundError:
+            raise FileNotFoundError("Отсутствует файл item.csv")
 
     @staticmethod
     def string_to_number(stroke):
